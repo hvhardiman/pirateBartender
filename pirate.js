@@ -1,18 +1,9 @@
 var readlineSync = require('readline-sync');
-//  MAX = 60, MIN = 0, value = 15, key;
-//console.log('\n\n' + (new Array(20)).join(' ') +
-//  '[Z] <- -> [X]  FIX: [SPACE]\n');
-//while (true) {
-//  console.log('\x1B[1A\x1B[K|' +
-//    (new Array(value + 1)).join('-') + 'O' +
-//    (new Array(MAX - value + 1)).join('-') + '| ' + value);
-//  key = readlineSync.keyIn('',
-//    {hideEchoBack: true, mask: '', limit: 'zx '});
-//  if (key === 'z') { if (value > MIN) { value--; } }
-//  else if (key === 'x') { if (value < MAX) { value++; } }
-//  else { break; }
-//}
-//console.log('\nA value the user requested: ' + value);
+
+var Customer = function(name, preferences){
+    this.name = name;
+    this.preferences = preferences;
+}
 
 var Question = function(flavor, text){
     this.flavor = flavor;
@@ -37,11 +28,42 @@ Pantry.prototype.getIngredient = function(name, amount){
     //code to remove amount of name ingredient    
 }
 
-/**
+/*
  * In the client code
  */
+
 var questionArray = [];
-var q1 = new Question("Sweet", "Do you like sweet?");
-questionArray.push(q1);
-console.log(questionArray[0].flavor);
+var customerArray = [];
+
+var q0 = new Question("Sweet", "Do you like sweet?");
+var q1 = new Question("Strength", "Do you like strong?");
+var q2 = new Question("Bitter", "Do you like bitter?");
+var q3 = new Question("Fruity", "Do you like fruity?");
+var q4 = new Question("Salty", "Do you like salty?");
+
+
+
+//Push the question objects into an array
+questionArray = pushQuestions();
+console.log(questionArray);
+
+//Determine User Info
+getAnswers(questionArray)
+
+
+
 var ing = new Ingredient("Strong", "Rum", 20);
+
+function pushQuestions(){
+    
+    var tempArray = [];
+    var dynamicString = "";
+    
+    for(var i = 0; i <= 4; i++){
+        dynamicString = "q" + i;
+        tempArray.push(eval(dynamicString));
+    }
+    
+    return tempArray;
+
+}
