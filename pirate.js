@@ -1,19 +1,31 @@
 var readlineSync = require('readline-sync');
 
 //********************START PREFERENCE
-var Preference = function(catagory, items){
+var Preference = function(catagory, item){
     this.catagory = catagory;
-    this.items = items;
+    this.item = item;
 }
 //********************END PREFERENCE
 
-//********************START CUSTOMER
+//********************START BARTENDER
+var Bartender = function(pantry){
+    var myName = readlineSync.question('May I have your name: Bartender? ');
+    this.name = myName;
+    this.pantry = pantry;
+}
+Bartender.prototype.createDrink = function(customer){
+    
+    console.log("From BTender " + customer.preferenceList.catagory);
+    
+    
+}
+//********************END BARTENDER
+
 //********************START CUSTOMER
 var Customer = function(name){
     this.name = name;
     this.preferenceList = [];
 }
-
 Customer.prototype.getPreferences = function(qList, ingList){
     
     var myprefCatagory = "";
@@ -23,7 +35,7 @@ Customer.prototype.getPreferences = function(qList, ingList){
     var tempPref = {};
     var filteredList = [];
     var valueList = []
-    var askQuestion = true;
+    var answer = true;
     
     qList.forEach(function(quest){
         
@@ -37,20 +49,25 @@ Customer.prototype.getPreferences = function(qList, ingList){
                 return element.name;
             });
             
-    
-            console.log(filteredList);
-            console.log(valueList);
-            
-            while(askQuestion){
+            while(answer != -1){
                 
-                askQuestion = readlineSync.keyInSelect(valueList, "Which " + quest.catagory + " items?");
-                console.log("askQ " + askQuestion);
-                if(askQuestion === -1){break};
+                answer = readlineSync.keyInSelect(valueList, "Which " + quest.catagory + " items?");
                 
-                console.log("Ok, " + quest.catagory + " goes in your preferences.");
+                if(answer === -1){
+                    answer = true;
+                    break;
+                }
+                
+                console.log("Ok, " + quest.catagory + " " + valueList[answer] + " goes in your preferences.");
               
-                mytempprefIng = new Preference(quest.catagory, filteredList[askquestion])
+                mytempprefIng = new Preference(quest.catagory, valueList[answer]);
                 pList.push(mytempprefIng);
+                
+                valueList.splice(answer,1);
+                
+                if(valueList.length === 0){
+                    break;
+                }
             }
           
           
@@ -60,12 +77,8 @@ Customer.prototype.getPreferences = function(qList, ingList){
         
     });
 }
+//********************END CUSTOMER
 
-Customer.prototype.addPreference = function(preference){
-    this.preferenceList.push(preference);
-}
-//********************END CUSTOMER
-//********************END CUSTOMER
 
 
 
@@ -92,10 +105,10 @@ var Pantry = function(itemList){
 
 
 
-//MAIN FUNCTIONALITY
-//MAIN FUNCTIONALITY
-//MAIN FUNCTIONALITY
-//MAIN FUNCTIONALITY
+//MAIN FUNCTIONALITY START
+//MAIN FUNCTIONALITY START
+//MAIN FUNCTIONALITY START
+//MAIN FUNCTIONALITY START
 
 //Question Objects
 
@@ -111,19 +124,23 @@ questionList = pushQuestions();
 ingredientList = pushIngredients();
 
 var pantryList = new Pantry(ingredientList);
-var customerObject = createCustomer();
 
+var customerObject = createCustomer();
 customerObject.getPreferences(questionList,ingredientList);
 
+var bartender = new Bartender(pantryList);
+
+bartender.createDrink(customerObject);
 
 
-console.log(customerObject);
 
-//MAIN FUNCTIONALITY
-//MAIN FUNCTIONALITY
-//MAIN FUNCTIONALITY
-//MAIN FUNCTIONALITY
-//MAIN FUNCTIONALITY
+
+
+//MAIN FUNCTIONALITY END
+//MAIN FUNCTIONALITY END
+//MAIN FUNCTIONALITY END
+//MAIN FUNCTIONALITY END
+
 
 
 
@@ -132,11 +149,6 @@ console.log(customerObject);
 //*************************FUNCTIONS
 //*************************FUNCTIONS
 //*************************FUNCTIONS
-
-function isItem(){
-    
-
-}
 
 function pushQuestions(){
     
