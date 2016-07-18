@@ -1,9 +1,8 @@
 var readlineSync = require('readline-sync');
 
 //********************START PREFERENCE
-var Preference = function(catagory, item){
+var Preference = function(catagory){
     this.catagory = catagory;
-    this.item = item;
 }
 //********************END PREFERENCE
 
@@ -12,11 +11,18 @@ var Bartender = function(pantry){
     var myName = readlineSync.question('May I have your name: Bartender? ');
     this.name = myName;
     this.pantry = pantry;
-//    console.log("My Pantry " + JSON.stringify(this.pantry.ingredients));
-    console.dir("add text " + this.pantry.ingredients);
+    //console.log("My Pantry " + JSON.stringify(this.pantry.ingredients));
+    //console.dir(this.pantry.ingredients);
 }
 Bartender.prototype.createDrink = function(customer){
-    console.log("From BTender " + this.pantry.ingredients);
+    //console.dir(customer);
+    
+    customer.preferenceList.forEach(function(pref){
+        
+        console.log(pref.catagory);
+
+        
+    });
 }
 //********************END BARTENDER
 
@@ -25,55 +31,18 @@ var Customer = function(name){
     this.name = name;
     this.preferenceList = [];
 }
-Customer.prototype.getPreferences = function(qList, ingList){
-    
-    var myprefCatagory = "";
-    var mytempprefIng;
+Customer.prototype.getPreferences = function(qList){
     var custName = this.name;
     var pList = this.preferenceList;
-    var tempPref = {};
-    var filteredList = [];
-    var valueList = []
-    var answer = true;
-    
+    var mytempprefIng;
     qList.forEach(function(quest){
-        
-        if (readlineSync.keyInYN(quest.text)) {
-            
-            filteredList = ingList.filter(function(item){
-                return item.catagory === quest.catagory; 
-            });
-            
-            valueList = filteredList.map(function(element){
-                return element.name;
-            });
-            
-            while(answer != -1){
-                
-                answer = readlineSync.keyInSelect(valueList, "Which " + quest.catagory + " items?");
-                
-                if(answer === -1){
-                    answer = true;
-                    break;
-                }
-                
-                console.log("Ok, " + quest.catagory + " " + valueList[answer] + " goes in your preferences.");
-              
-                mytempprefIng = new Preference(quest.catagory, valueList[answer]);
-                pList.push(mytempprefIng);
-                
-                valueList.splice(answer,1);
-                
-                if(valueList.length === 0){
-                    break;
-                }
-            }
-          
-          
+        if (readlineSync.keyInYN(quest.text)) {    
+            console.log("Ok, " + quest.catagory + " goes in your preferences.");
+            mytempprefIng = new Preference(quest.catagory);  
+            pList.push(mytempprefIng);
         } else {
-          console.log("Understood!! No " + quest.catagory + " for " + custName); 
+          console.log("Understood!! No " + quest.catagory + " drinks for " + custName); 
         }
-        
     });
 }
 //********************END CUSTOMER
@@ -89,7 +58,6 @@ var Ingredient = function(catagory, name, quantity){
 var Pantry = function(itemList){
     this.ingredients = itemList;
 }
-
 //MAIN FUNCTIONALITY START
 //MAIN FUNCTIONALITY START
 //MAIN FUNCTIONALITY START
@@ -111,7 +79,7 @@ ingredientList = pushIngredients();
 var pantryList = new Pantry(ingredientList);
 
 var customerObject = createCustomer();
-customerObject.getPreferences(questionList,ingredientList);
+customerObject.getPreferences(questionList);
 
 var bartender = new Bartender(pantryList);
 
